@@ -9,9 +9,7 @@
 import UIKit
 
 protocol EmployeeListViewModelDelegate: class {
-    
     func modelDidEndGetEmployeeData(_ success:Bool, employees: [EEmployee], errors: [String: String])
-    
 }
 
 
@@ -19,12 +17,9 @@ protocol EmployeeListViewModelDelegate: class {
 class EmployeeListViewModel: NSObject, ServiceModelDelegate {
     
     var delegate:EmployeeListViewModelDelegate!
-    
     let sm =  ServiceModel(PostCall: false, synchronous: false)
     
-    
     override init() {
-        
         super.init()
     }
     
@@ -38,17 +33,11 @@ class EmployeeListViewModel: NSObject, ServiceModelDelegate {
         print("ServiceModelDidFinishTask")
         
         var errDic = [String:String]()
-        
         if data.apiResponsed {
-            
-                
                 if let dataArray = data.data {
-                    
                     let employees = Mapper.getEmployees(From: dataArray as? [AnyObject])
-                    
                     delegate.modelDidEndGetEmployeeData(true, employees: employees, errors: errDic)
                     return;
-                    
                 }
                 
                 delegate.modelDidEndGetEmployeeData(false, employees: [], errors: errDic)
@@ -66,7 +55,7 @@ class EmployeeListViewModel: NSObject, ServiceModelDelegate {
 //                }
 //            }
         }
-        else{
+        else {
             if data.timedOut == false{
                 errDic[AppError_K] = data.appError
             }
