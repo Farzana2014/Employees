@@ -19,7 +19,7 @@ class Mapper: NSObject {
             let obj = managed as! Employee
             
             obj.iD = eObj.Id
-            //obj.rating = Int32(eObj.rating.intValue)
+            obj.rating = Int32(eObj.rating.intValue)
             obj.name = eObj.employee_name
             obj.age =  eObj.employee_age
             obj.salary =  eObj.employee_salary
@@ -67,13 +67,13 @@ class Mapper: NSObject {
                     employee.Id = aID as? String
                 }
                 
+                employee.rating = 0
                 
                 employees.append(employee)
                 
                 let dm = DataModel()
                 if !dm.insertData(Array: [employee], entityName: "Employee") {
                     print ("Not saved")
-                    //delegate.modelDidEndUploading(Success: false)
                 }
                 
             }

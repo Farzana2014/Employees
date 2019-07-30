@@ -6,9 +6,10 @@
 //
 
 import CoreData
+import UIKit
 
 class DataModel: NSObject {
-
+    
     //@objc  @objc MARK: CoreData Stack
     
     func saveContext(){
@@ -29,7 +30,7 @@ class DataModel: NSObject {
     }
     
     func managedObjectContext()-> NSManagedObjectContext?{
-        let app = AppDelegate.shared()
+        let app = (UIApplication.shared.delegate!) as! AppDelegate
         
         if let moc = app.managedObjectContext {
             return moc
@@ -49,15 +50,12 @@ class DataModel: NSObject {
     
     func persistentStoreCoordinator ()-> NSPersistentStoreCoordinator?{
         
-        let app = AppDelegate.shared()
+        let app = (UIApplication.shared.delegate!) as! AppDelegate
         
         if let psc = app.persistentStoreCoordinator {
             return psc
-        }
-        else {
-            
+        } else {
             let storeURL = applicationStoresDirectory()!.appendingPathComponent("Employee.sqlite")
-            
             print(storeURL)
             let options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true, NSSQLitePragmasOption: ["journal_mode": "DELETE"]] as [String : Any]
             
@@ -171,7 +169,7 @@ class DataModel: NSObject {
     
     func managedObjectModel()->NSManagedObjectModel?{
         
-        let app = AppDelegate.shared()
+        let app = (UIApplication.shared.delegate!) as! AppDelegate
         
         if let mom = app.managedObjectModel{
             return mom
@@ -199,8 +197,16 @@ class DataModel: NSObject {
     }
     
     // MARK: - Database operations
-    // Insert
     
+    // Fetch
+    func fetchAllEmployeeData (fetchOffset:Int) -> [EEmployee] {
+        let dm = DataModel()
+        let sort = NSSortDescriptor.init(key: "rating", ascending: true)
+        let allEmployeeData =  dm.getData(By: "Employee", managed: false, sorts:[sort], predicate: nil, fetchOffset:fetchOffset) as! [EEmployee]
+        return allEmployeeData
+    }
+    
+    // Insert
     func insertData(Array entityObjects:[NSObject], entityName: String) ->Bool{
         
         guard let moc = managedObjectContext() else {
@@ -227,13 +233,13 @@ class DataModel: NSObject {
     
     // Update if exist (by given predicate), otherwise insert
     
-    func modify(_ data: NSObject, entity:String, predicate:NSPredicate?)->Bool{
+    func modify(_ data: NSObject, entity:String, predicate:NSPredicate?, fetchOffset:Int)->Bool{
         
         guard let moc = managedObjectContext() else {
             return false
         }
         
-        let arr = getData(By: entity, managed:true, sorts: nil, predicate: predicate, context: moc)
+        let arr = getData(By: entity, managed:true, sorts: nil, predicate: predicate, context: moc, fetchOffset:fetchOffset)
         
         if arr.count>0{
             let mObj = arr.first! as! NSManagedObject
@@ -256,18 +262,20 @@ class DataModel: NSObject {
     
     // Fetch
     
-    func getData(By entity:String, managed: Bool, sorts:[NSSortDescriptor]?, predicate:NSPredicate?) ->[AnyObject]{
+    func getData(By entity:String, managed: Bool, sorts:[NSSortDescriptor]?, predicate:NSPredicate?, fetchOffset:Int) ->[AnyObject]{
         
         guard let moc = managedObjectContext() else {
             return [AnyObject] ()
         }
         
-        return getData(By: entity, managed: managed, sorts: sorts, predicate: predicate, context: moc)
+        return getData(By: entity, managed: managed, sorts: sorts, predicate: predicate, context: moc, fetchOffset:fetchOffset)
     }
     
-    fileprivate func getData(By entity:String, managed: Bool, sorts:[NSSortDescriptor]?, predicate:NSPredicate?, context:NSManagedObjectContext) ->[AnyObject]{
+    fileprivate func getData(By entity:String, managed: Bool, sorts:[NSSortDescriptor]?, predicate:NSPredicate?, context:NSManagedObjectContext, fetchOffset:Int) ->[AnyObject]{
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        fetchRequest.fetchLimit = DATA_FETCH_LIMIT
+        fetchRequest.fetchOffset = fetchOffset
         var results = [AnyObject] ()
         
         if let _ = predicate{
@@ -308,14 +316,11 @@ class DataModel: NSObject {
     }
     
     // Update
-    
-    
     func updateData(with entity: String, predicate:NSPredicate?, entityObject: NSObject)-> Bool{
         
         guard let moc = managedObjectContext() else {
             return  false
         }
-        
         
         return updateData(with: entity, predicate: predicate, entityObject: entityObject, context: moc)
     }
@@ -454,60 +459,5 @@ class DataModel: NSObject {
             return false
         }
     }
-    
-    //MARK: - Custom CRUD
-    
-//    func insertWorkoutAndRelatedExecises(Workout workouts:[MSWorkout])->Bool{
-//        
-//        guard let moc = managedObjectContext() else {
-//            return false
-//        }
-//        
-//        for eObj in workouts {
-//            
-//            let entity = NSEntityDescription.entity(forEntityName: "Workout", in: moc)
-//            let mObj = NSManagedObject(entity: entity!, insertInto: moc) as! Workout
-//            Mapper.convert(fromEntity: eObj, toManaged: mObj)
-//            
-//            for eIObj in eObj.Exercises {
-//                
-//                let entity = NSEntityDescription.entity(forEntityName: "WorkoutExercise", in: moc)
-//                let mIObj = NSManagedObject(entity: entity!, insertInto: moc)
-//                Mapper.convert(fromEntity:eIObj, toManaged: mIObj)
-//                
-//                mObj.addToWorkoutExerciseRelation(mIObj as! WorkoutExercise)
-//            
-//            }
-//            
-//        }
-//        
-//        do {
-//            try  moc.save()
-//            return true
-//            
-//        } catch {
-//            print("error to insert Input: \(error)")
-//            return false
-//        }
-//        
-//    }
-    
-//    func getWorkoutAndRelatedExecises() -> [MSWorkout] {
-//
-//        let dm = DataModel()
-//
-//        let sortDescriptor = NSSortDescriptor(key: "workOutId", ascending: true)
-//
-//        let savedR = dm.getData(By: "WorkoutExercise", managed: false, sorts:[sortDescriptor], predicate: nil) as! [MSWorkoutExercises]
-//        let savedR1 = dm.getData(By: "Workout", managed: false, sorts: nil, predicate: nil) as! [MSWorkout]
-//
-//        for item in savedR1 {
-//            let temp = savedR.filter {$0.Ended == item.Ended}
-//            item.Exercises = temp
-//
-//        }
-//
-//        return savedR1
-//    }
     
 }

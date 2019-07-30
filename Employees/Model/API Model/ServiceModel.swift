@@ -41,15 +41,7 @@ class ServiceModel: NSObject, WebServiceDelegate {
     
     func header()->[String: String]{
         
-        var dic = [String: String]()
-//        dic["AuthToken"] = ""
-//        
-//        if let account = RTUserDefaults.getUserModel() {
-//            if let cToken = account.Token, cToken.count > 0 {
-//                dic["AuthToken"] = account.Token
-//            }
-//        }
-//        
+        let dic = [String: String]()
         return dic
     }
 
@@ -105,19 +97,14 @@ class ServiceModel: NSObject, WebServiceDelegate {
     
         print("webServiceDidFinishTask")
         
-        
             if isSynchronousCall {
                 DispatchQueue.main.async{
-                    
                     if data.timedOut{
-
                     }
                     
                     self.delegate.ServiceModelDidFinishTask(self, data: data, service: service)
-                    
                 }
-            }
-            else{
+            } else {
                 delegate.ServiceModelDidFinishTask(self, data: data, service: service)
             }
     

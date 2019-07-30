@@ -31,17 +31,9 @@ class WebService: NSObject {
         super.init()
     }
     
-
-
-    
     func callService() {
         
         let url = URL(string: self.urlString)
-        
-        //let url = URL(fileURLWithPath: self.urlString)
-        
-        
-        
         let theRequest = NSMutableURLRequest(url: url!)
         theRequest.timeoutInterval = connTimeOut
         theRequest.httpMethod = isPostCall ? "POST": "GET"
@@ -178,14 +170,8 @@ class WebService: NSObject {
                 
                 do {
                     let decoded = try JSONSerialization.jsonObject(with: returnData, options: []) as AnyObject
-                    
-                    print("RESPONSE JSON: \(decoded)")
-                    
                     serviceData.appError = ""
                     serviceData.data = decoded
-//                    if decoded is [String:AnyObject] {
-//                        serviceData.setValueForm(Dictionary: decoded as! [String : AnyObject])
-//                    }
                 }
                 catch {
                     serviceData.appError = "Response not parsed successfully"
@@ -194,8 +180,7 @@ class WebService: NSObject {
                 delegate?.webServiceDidFinishTask(self, data: serviceData, service: service)
                 
             }
-        }
-        else {
+        } else {
             
             print("<Respons Error>")
             
@@ -205,8 +190,7 @@ class WebService: NSObject {
             delegate?.webServiceDidFinishTask(self, data: serviceData, service: service)
 
         }
-        
-
+    
     }
     
     

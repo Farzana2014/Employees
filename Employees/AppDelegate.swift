@@ -20,10 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, EmployeeListViewModelDele
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        if DB_UPDATED == false {
-            getEmployeeData()
-            DB_UPDATED = true
-        }
+//        if DB_UPDATED == false {
+//            getEmployeeData()
+//            DB_UPDATED = true
+//        }
         return true
     }
 
@@ -48,10 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, EmployeeListViewModelDele
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-    class func shared()->AppDelegate{
-        return (UIApplication.shared.delegate!) as! AppDelegate
-    }
     
     @objc func getEmployeeData(){
         
@@ -74,9 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, EmployeeListViewModelDele
             //            } else {
             //                ViewManager.navigate(From: self, To: ProfileSetUpVC, data: nil)
             //            }
-        }
-        else{
-            var containFieldError = false
+        } else {
+            _ = false
             
             //            for (k,v) in errors{
             //

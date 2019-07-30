@@ -1,5 +1,5 @@
 //
-//  EConstants.swift
+//  ETConstants.swift
 //  Employees
 //
 //  Created by Farzana Sultana on 7/27/19.
@@ -10,6 +10,7 @@ import UIKit
 
 //MARK: - Constants
 
+
 let ErrorMeassage_K = "ErrorMeassage"
 let APIError_K = "APIError"
 let AppError_K = "AppError"
@@ -18,11 +19,7 @@ let AppError_K = "AppError"
 let API_ERROR  = "Something went wrong. Please try again later"
 let COMMON_ERROR  = "Something went wrong. Please try again later"
 let API_Timeout = 30
-
-var DB_UPDATED = false
-
-
-let IS_DEVICE_IOS12 : Bool = (UIDevice.current.systemVersion as NSString).floatValue >= 12.0
+let DATA_FETCH_LIMIT = 10
 
 
 let DOMAIN_URL = "http://dummy.restapiexample.com/"
@@ -32,8 +29,7 @@ let MytechniqueStoryboard = "Mytechnique"
 
 
 //MARK: - Enums
-
-enum MessageKey:String {
+enum MessageKey:String{
     
     case NoInternet
     case NoDataFound
@@ -42,6 +38,6 @@ enum MessageKey:String {
 enum Service{
     case UNKNOWN
     case EMPLOYEE_DATA
-
+    
 }
 
