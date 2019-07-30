@@ -35,9 +35,7 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if (self.allEmployeeData.count == 0){
-            loadData()
-        }
+        loadData()
     }
     
     // MARK: - UITableView delegate
@@ -123,22 +121,42 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
         
     }
     
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        // UITableView only moves in one direction, y axis
+//        let currentOffset: CGFloat = scrollView.contentOffset.y
+//        let maximumOffset: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
+//        // Change 50.0 to adjust the distance from bottom
+//        if maximumOffset - currentOffset <= 50.0 {
+//            if self.allEmployeeData.count >= DATA_FETCH_LIMIT {
+//                fetchOffSet = fetchOffSet + DATA_FETCH_LIMIT
+//                let array: [EEmployee] = dm.fetchAllEmployeeData(fetchOffset: fetchOffSet)
+//
+//                self.allEmployeeData .append(contentsOf: array)
+//                self.employeeListTable.reloadData()
+//            }
+//        }
+//    }
+//
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         // UITableView only moves in one direction, y axis
         let currentOffset: CGFloat = scrollView.contentOffset.y
         let maximumOffset: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
         // Change 50.0 to adjust the distance from bottom
         if maximumOffset - currentOffset <= 50.0 {
-            if self.allEmployeeData.count >= DATA_FETCH_LIMIT {
-                fetchOffSet = fetchOffSet + DATA_FETCH_LIMIT
-                let array: [EEmployee] = dm.fetchAllEmployeeData(fetchOffset: fetchOffSet)
+            if self.allEmployeeData.count >= 100 {
+                fetchOffSet = fetchOffSet + 100
+                let result: [EEmployee] = dm.fetchAllEmployeeData(fetchOffset: fetchOffSet)
                 
-                self.allEmployeeData .append(contentsOf: array)
+                self.allEmployeeData.append(contentsOf: result)
+                
+                let sortDescriptor = NSSortDescriptor(key: "rating", ascending: false)
+                let sortedResults = (self.allEmployeeData as NSArray).sortedArray(using: [sortDescriptor]) as! [EEmployee]
+                self.allEmployeeData = sortedResults
                 self.employeeListTable.reloadData()
             }
         }
     }
-    
     // MARK: - API Call
     
     @objc func getEmployeeData(){
@@ -178,16 +196,33 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
     fileprivate func loadData() {
         // Do any additional setup after loading the view.
         
-        if (self.allEmployeeData.count == 0) { // check internet connection also
+        let result = dm.fetchAllEmployeeData(fetchOffset:DATA_FETCH_LIMIT)
+        let sortDescriptor = NSSortDescriptor(key: "rating", ascending: false)
+        let sortedResults = (result as NSArray).sortedArray(using: [sortDescriptor]) as! [EEmployee]
+        self.allEmployeeData = sortedResults
+        
+        if (self.allEmployeeData.count == 0) {
             getEmployeeData()
         } else {
-            self.allEmployeeDataSorted = dm.fetchAllEmployeeData(fetchOffset:DATA_FETCH_LIMIT)
-            self.allEmployeeData = allEmployeeDataSorted.sorted(by: { $0.rating.intValue > $1.rating.intValue })
-            
             DispatchQueue.main.async{
+                
                 self.employeeListTable.reloadData()
             }
         }
     }
+//    fileprivate func loadData() {
+//        // Do any additional setup after loading the view.
+//
+//        if (self.allEmployeeData.count == 0) { // check internet connection also
+//            getEmployeeData()
+//        } else {
+//            self.allEmployeeDataSorted = dm.fetchAllEmployeeData(fetchOffset:DATA_FETCH_LIMIT)
+//            self.allEmployeeData = allEmployeeDataSorted.sorted(by: { $0.rating.intValue > $1.rating.intValue })
+//
+//            DispatchQueue.main.async{
+//                self.employeeListTable.reloadData()
+//            }
+//        }
+//    }
 }
 

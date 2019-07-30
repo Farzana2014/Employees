@@ -201,8 +201,7 @@ class DataModel: NSObject {
     // Fetch
     func fetchAllEmployeeData (fetchOffset:Int) -> [EEmployee] {
         let dm = DataModel()
-        let sort = NSSortDescriptor.init(key: "rating", ascending: true)
-        let allEmployeeData =  dm.getData(By: "Employee", managed: false, sorts:[sort], predicate: nil, fetchOffset:fetchOffset) as! [EEmployee]
+        let allEmployeeData =  dm.getData(By: "Employee", managed: false, sorts:nil, predicate: nil, fetchOffset:fetchOffset) as! [EEmployee]
         return allEmployeeData
     }
     
@@ -259,6 +258,7 @@ class DataModel: NSObject {
         }
         
     }
+    
     
     // Fetch
     
