@@ -29,6 +29,7 @@
 		7484535922EDE0F900E2F3CE /* Employee+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484535622EDE0F900E2F3CE /* Employee+CoreDataClass.swift */; };
 		7484535B22EDE12A00E2F3CE /* EmployeeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484535A22EDE12A00E2F3CE /* EmployeeListViewModel.swift */; };
 		74B8B86622EDFBBF00804286 /* Employee.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 74B8B86522EDFBBF00804286 /* Employee.xcdatamodel */; };
+		74FEE9F322F0BD56005CBB4C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FEE9F222F0BD56005CBB4C /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		7484535622EDE0F900E2F3CE /* Employee+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Employee+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7484535A22EDE12A00E2F3CE /* EmployeeListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmployeeListViewModel.swift; sourceTree = "<group>"; };
 		74B8B86522EDFBBF00804286 /* Employee.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Employee.xcdatamodel; sourceTree = "<group>"; };
+		74FEE9F222F0BD56005CBB4C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				7484534C22EDE0E200E2F3CE /* EConstants.swift */,
+				74FEE9F222F0BD56005CBB4C /* Reachability.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				7484535922EDE0F900E2F3CE /* Employee+CoreDataClass.swift in Sources */,
 				7484531E22ECA64500E2F3CE /* AppDelegate.swift in Sources */,
 				7484532022ECA64500E2F3CE /* EmployeeListViewController.swift in Sources */,
+				74FEE9F322F0BD56005CBB4C /* Reachability.swift in Sources */,
 				7484534D22EDE0E200E2F3CE /* EConstants.swift in Sources */,
 				74670D5A22EF585200C00E25 /* DetailsViewController.swift in Sources */,
 				7484535122EDE0EE00E2F3CE /* ServiceData.swift in Sources */,

@@ -121,23 +121,7 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
         
     }
     
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        // UITableView only moves in one direction, y axis
-//        let currentOffset: CGFloat = scrollView.contentOffset.y
-//        let maximumOffset: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
-//        // Change 50.0 to adjust the distance from bottom
-//        if maximumOffset - currentOffset <= 50.0 {
-//            if self.allEmployeeData.count >= DATA_FETCH_LIMIT {
-//                fetchOffSet = fetchOffSet + DATA_FETCH_LIMIT
-//                let array: [EEmployee] = dm.fetchAllEmployeeData(fetchOffset: fetchOffSet)
-//
-//                self.allEmployeeData .append(contentsOf: array)
-//                self.employeeListTable.reloadData()
-//            }
-//        }
-//    }
-//
-    
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         // UITableView only moves in one direction, y axis
         let currentOffset: CGFloat = scrollView.contentOffset.y
@@ -202,7 +186,23 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
         self.allEmployeeData = sortedResults
         
         if (self.allEmployeeData.count == 0) {
-            getEmployeeData()
+            
+            if Reachability.isConnectedToNetwork() == true {
+                getEmployeeData()
+            } else {
+                print("Internet connection FAILED")
+                
+                let alertController = UIAlertController(title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: UIAlertController.Style.alert)
+                
+                let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default)
+                {
+                    (result : UIAlertAction) -> Void in
+                }
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+
+            }
+            
         } else {
             DispatchQueue.main.async{
                 
@@ -210,19 +210,5 @@ class EmployeeListViewController: UIViewController, EmployeeListViewModelDelegat
             }
         }
     }
-//    fileprivate func loadData() {
-//        // Do any additional setup after loading the view.
-//
-//        if (self.allEmployeeData.count == 0) { // check internet connection also
-//            getEmployeeData()
-//        } else {
-//            self.allEmployeeDataSorted = dm.fetchAllEmployeeData(fetchOffset:DATA_FETCH_LIMIT)
-//            self.allEmployeeData = allEmployeeDataSorted.sorted(by: { $0.rating.intValue > $1.rating.intValue })
-//
-//            DispatchQueue.main.async{
-//                self.employeeListTable.reloadData()
-//            }
-//        }
-//    }
 }
 
